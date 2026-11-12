@@ -85,9 +85,9 @@ void relax(void)
 void verify(void)
 {
     double s = 0.;
-    for (k = 0; k < N; k++)
-    for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
+    for (j = 0; j < N; j++)
+    for (k = 0; k < N; k++)
         s += A[i][j][k] * (i + 1) * (j + 1) * (k + 1)
              / ((double)N * N * N);
     printf("S=%.12e\n", s);
