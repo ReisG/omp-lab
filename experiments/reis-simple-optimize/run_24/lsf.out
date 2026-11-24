@@ -1,0 +1,41 @@
+Sender: LSF System <lsfadmin@polus-c2-ib.bmc.hpc.cs.msu.ru>
+Subject: Job 1627200: <export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N100" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/exit_code.txt"> in cluster <MSUCluster> Done
+
+Job <export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N100" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/exit_code.txt"> was submitted from host <polus-ib.bmc.hpc.cs.msu.ru> by user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 01:15:40 2026
+Job was executed on host(s) <polus-c2-ib.bmc.hpc.cs.msu.ru>, in queue <short>, as user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 01:15:41 2026
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11> was used as the home directory.
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab> was used as the working directory.
+Started at Wed Nov 25 01:15:41 2026
+Terminated at Wed Nov 25 01:15:50 2026
+Results reported at Wed Nov 25 01:15:50 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N100" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/exit_code.txt"
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   8.37 sec.
+    Max Memory :                                 12 MB
+    Average Memory :                             8.33 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                4
+    Run time :                                   12 sec.
+    Turnaround time :                            10 sec.
+
+The output (if any) follows:
+
+
+
+PS:
+
+Read file </home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_24/lsf.err> for stderr output of this job.
+

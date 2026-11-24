@@ -1,0 +1,41 @@
+Sender: LSF System <lsfadmin@polus-c4-ib.bmc.hpc.cs.msu.ru>
+Subject: Job 1627178: <export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N30" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/exit_code.txt"> in cluster <MSUCluster> Done
+
+Job <export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N30" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/exit_code.txt"> was submitted from host <polus-ib.bmc.hpc.cs.msu.ru> by user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 01:14:59 2026
+Job was executed on host(s) <polus-c4-ib.bmc.hpc.cs.msu.ru>, in queue <short>, as user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 01:15:00 2026
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11> was used as the home directory.
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab> was used as the working directory.
+Started at Wed Nov 25 01:15:00 2026
+Terminated at Wed Nov 25 01:15:01 2026
+Results reported at Wed Nov 25 01:15:01 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+export OMP_NUM_THREADS=1;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/bins/prog_N30" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/exit_code.txt"
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   0.29 sec.
+    Max Memory :                                 4 MB
+    Average Memory :                             2.00 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              1
+    Max Threads :                                1
+    Run time :                                   1 sec.
+    Turnaround time :                            2 sec.
+
+The output (if any) follows:
+
+
+
+PS:
+
+Read file </home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/reis-simple-optimize/run_2/lsf.err> for stderr output of this job.
+
