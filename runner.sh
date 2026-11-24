@@ -117,10 +117,16 @@ for meta in "${RUN_META[@]}"; do
     IFS=',' read -r rid n t iter <<< "$meta"
     RUN_DIR="$EXP_DIR/run_${rid}"
 
-    time_val=$(cat "$RUN_DIR/time.txt" 2>/dev/null || echo "NA")
-    rc_val=$(cat "$RUN_DIR/exit_code.txt" 2>/dev/null || echo "ERR")
+    if [[ -f "$RUN_DIR/time.txt" && -f "$RUN_DIR/exit_code.txt" ]]; then
+        time_val=$(cat "$RUN_DIR/time.txt")
+        rc_val=$(cat "$RUN_DIR/exit_code.txt")
+    elif grep -q "TERM_RUNLIMIT" "$RUN_DIR/lsf.out" 2>/dev/null; then
+        time_val="inf"
+        rc_val="TIMEOUT"
+    else
+        time_val="NA"
+        rc_val="ERR"
+    fi
 
     echo "${rid},${n},${t},${iter},${time_val},${rc_val}" >> "$CSV_FILE"
 done
-
-echo "Готово! Результаты сохранены в: $CSV_FILE"

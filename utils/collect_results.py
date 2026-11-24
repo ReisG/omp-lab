@@ -33,28 +33,40 @@ def main():
         rc_file = rdir / "exit_code.txt"
         lsf_file = rdir / "lsf.out"
 
-        # Пропускаем задачи, которые были прерваны или не успели стартовать
-        if not (time_file.exists() and rc_file.exists() and lsf_file.exists()):
+        if not lsf_file.exists():
             skipped += 1
             continue
 
-        time_val = time_file.read_text().strip()
-        rc_val = rc_file.read_text().strip()
         lsf_text = lsf_file.read_text(errors="replace")
-
         m_threads = re.search(r"OMP_NUM_THREADS=(\d+)", lsf_text)
         m_n = re.search(r"prog_N(\d+)", lsf_text)
 
-        if not (m_threads and m_n and time_val):
+        if not (m_threads and m_n):
             skipped += 1
             continue
 
         n_val = int(m_n.group(1))
         t_val = int(m_threads.group(1))
-        iter_counts[(n_val, t_val)] += 1
-        iter_num = iter_counts[(n_val, t_val)]
 
-        rows.append((run_id, n_val, t_val, iter_num, time_val, rc_val))
+        # Случай 1: задачу убил сам LSF по превышению лимита -W
+        if not (time_file.exists() and rc_file.exists()):
+            if "TERM_RUNLIMIT" in lsf_text:
+                iter_counts[(n_val, t_val)] += 1
+                rows.append((run_id, n_val, t_val, iter_counts[(n_val, t_val)], "inf", "TIMEOUT"))
+            else:
+                skipped += 1
+            continue
+
+        time_val = time_file.read_text().strip()
+        rc_val = rc_file.read_text().strip()
+
+        # Случай 2: сработала утилита timeout (код 124 или 137)
+        if rc_val in ("124", "137"):
+            time_val = "inf"
+            rc_val = "TIMEOUT"
+
+        iter_counts[(n_val, t_val)] += 1
+        rows.append((run_id, n_val, t_val, iter_counts[(n_val, t_val)], time_val, rc_val))
 
     csv_path = exp_dir / "results.csv"
     with csv_path.open("w", encoding="utf-8") as f:
@@ -62,9 +74,8 @@ def main():
         for row in rows:
             f.write(",".join(map(str, row)) + "\n")
 
-    print(f"Собрано завершённых запусков: {len(rows)}")
-    print(f"Пропущено незавершённых/снятых: {skipped}")
-    print(f"Таблица сохранена: {csv_path}")
+    print(f"Собрано записей: {len(rows)}, пропущено: {skipped}")
+    print(f"Сохранено в: {csv_path}")
 
 
 if __name__ == "__main__":
