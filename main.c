@@ -48,19 +48,19 @@ int main(void)
 
 void init(void)
 {
-    for (i = 0; i < N; i++)
-    for (j = 0; j < N; j++)
     for (k = 0; k < N; k++)
+    for (j = 0; j < N; j++)
+    for (i = 0; i < N; i++)
     {
         double x = (double)i / (N - 1);
         double y = (double)j / (N - 1);
         double z = (double)k / (N - 1);
         double r2 = (x - 0.5) * (x - 0.5) + (y - 0.5) * (y - 0.5);
         if (!Active(i, j, k))
-            A[i][j][k] = 0.1 + 0.25 * exp(-r2) * cos(z);
+            A[k][j][i] = 0.1 + 0.25 * exp(-r2) * cos(z);
         else
-            A[i][j][k] = 0.7 * (2.0 + sin(3.0 * z) + cos(x))
-                        + 0.3 * A[i - 1][j][k];
+            A[k][j][i] = 0.7 * (2.0 + sin(3.0 * z) + cos(x))
+                        + 0.3 * A[k][j][i - 1];
     }
 }
 
@@ -78,23 +78,23 @@ void relax(void)
         cx = 1.0 + 0.1 * cos(x);
         cy = 0.8 + 0.1 * sin(y);
         cz = 0.6 + 0.1 * exp(-z);
-        old = A[i][j][k];
-        b = (cx * (A[i - 1][j][k] + A[i + 1][j][k])
-           + cy * (A[i][j - 1][k] + A[i][j + 1][k])
-           + cz * (A[i][j][k - 1] + A[i][j][k + 1])
+        old = A[k][j][i];
+        b = (cx * (A[k][j][i - 1] + A[k][j][i + 1])
+           + cy * (A[k][j - 1][i] + A[k][j + 1][i])
+           + cz * (A[k - 1][j][i] + A[k + 1][j][i])
            + 0.4 * sin(z) * cos(x + y)) / (2.0 * (cx + cy + cz) + 0.4);
-        A[i][j][k] = old + 0.79 * (b - old);
-        eps = Max(eps, fabs(A[i][j][k] - old));
+        A[k][j][i] = old + 0.79 * (b - old);
+        eps = Max(eps, fabs(A[k][j][i] - old));
     }
 }
 
 void verify(void)
 {
     double s = 0.;
-    for (i = 0; i < N; i++)
-    for (j = 0; j < N; j++)
     for (k = 0; k < N; k++)
-        s += A[i][j][k] * (i + 1) * (j + 1) * (k + 1)
+    for (j = 0; j < N; j++)
+    for (i = 0; i < N; i++)
+        s += A[k][j][i] * (i + 1) * (j + 1) * (k + 1)
              / ((double)N * N * N);
     printf("S=%.12e\n", s);
 }
