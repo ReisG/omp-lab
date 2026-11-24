@@ -48,9 +48,9 @@ int main(void)
 
 void init(void)
 {
-    for (k = 0; k < N; k++)
-    for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
+    for (j = 0; j < N; j++)
+    for (k = 0; k < N; k++)
     {
         double x = (double)i / (N - 1);
         double y = (double)j / (N - 1);
