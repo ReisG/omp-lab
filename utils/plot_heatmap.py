@@ -3,6 +3,7 @@
 # Usage: python3 plot_results.py omp_scaling_test/results.csv
 # ============================================================
 
+import copy
 import os
 import sys
 from pathlib import Path
@@ -14,7 +15,7 @@ if not os.environ.get("DISPLAY"):
     matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
+from matplotlib.patches import Patch, Rectangle
 
 
 def main():
@@ -24,45 +25,53 @@ def main():
     df = pd.read_csv(csv_path)
     df["N"] = pd.to_numeric(df["N"], errors="coerce")
     df["threads"] = pd.to_numeric(df["threads"], errors="coerce")
-    # Строка "inf" автоматически преобразуется в float('inf')
-    df["time_sec"] = pd.to_numeric(df["time_sec"], errors="coerce")
+    df = df[df["N"].notna() & df["threads"].notna()].copy()
 
-    # Берём успешные запуски (exit_code == 0) и таймауты (exit_code == TIMEOUT)
-    df["exit_code_str"] = df["exit_code"].astype(str).str.strip()
-    valid = df[df["exit_code_str"].isin(["0", "TIMEOUT"]) & df["time_sec"].notna()]
+    if df.empty:
+        raise ValueError("В results.csv нет строк с корректными N и threads.")
 
-    if valid.empty:
-        raise ValueError("Нет валидных данных для построения графика.")
+    df["N"] = df["N"].astype(int)
+    df["threads"] = df["threads"].astype(int)
 
-    pivot = (
-        valid.pivot_table(index="N", columns="threads", values="time_sec", aggfunc="mean")
-        .sort_index(axis=0)
-        .sort_index(axis=1)
-    )
-    pivot.index = pivot.index.astype(int)
-    pivot.columns = pivot.columns.astype(int)
+    # Хороший запуск: exit_code == 0 и конечное числовое время
+    exit_num = pd.to_numeric(df["exit_code"], errors="coerce")
+    time_num = pd.to_numeric(df["time_sec"], errors="coerce")
+    df["is_good"] = (exit_num == 0) & np.isfinite(time_num)
+    df["good_time"] = np.where(df["is_good"], time_num, np.nan)
 
-    raw = pivot.to_numpy(dtype=float)
+    all_n = sorted(df["N"].unique())
+    all_t = sorted(df["threads"].unique())
+    grid = pd.DataFrame(np.nan, index=all_n, columns=all_t, dtype=float)
+
+    for (n_val, t_val), grp in df.groupby(["N", "threads"]):
+        good_vals = grp.loc[grp["is_good"], "good_time"]
+        if len(good_vals) > 0:
+            # Хотя бы одна отработала — среднее из хороших значений
+            grid.loc[n_val, t_val] = good_vals.mean()
+        else:
+            # Все запуски для этой конфигурации с ошибкой / inf
+            grid.loc[n_val, t_val] = np.inf
+
+    raw = grid.to_numpy(dtype=float)
     inf_mask = np.isinf(raw)
     nan_mask = np.isnan(raw)
 
-    # Маскируем inf и NaN, чтобы цветовая шкала строилась только по конечным временам
     finite_data = np.ma.masked_where(inf_mask | nan_mask, raw)
-    cmap = plt.get_cmap("YlOrRd").copy()
-    cmap.set_bad(color="#e0e0e0")  # Серый цвет для незапущенных ячеек (NaN)
+    cmap = copy.copy(plt.get_cmap("YlOrRd"))
+    cmap.set_bad(color="#e0e0e0")
 
     fig, ax = plt.subplots(
-        figsize=(max(6.0, len(pivot.columns) * 1.2), max(4.5, len(pivot.index) * 0.9))
+        figsize=(max(6.5, len(all_t) * 1.25), max(4.8, len(all_n) * 0.95))
     )
     im = ax.imshow(finite_data, aspect="auto", cmap=cmap, origin="lower")
 
     cbar = fig.colorbar(im, ax=ax)
     cbar.set_label("Среднее время выполнения, сек")
 
-    ax.set_xticks(np.arange(len(pivot.columns)))
-    ax.set_xticklabels(pivot.columns)
-    ax.set_yticks(np.arange(len(pivot.index)))
-    ax.set_yticklabels(pivot.index)
+    ax.set_xticks(np.arange(len(all_t)))
+    ax.set_xticklabels(all_t)
+    ax.set_yticks(np.arange(len(all_n)))
+    ax.set_yticklabels(all_n)
 
     ax.set_xlabel("Количество потоков (threads)")
     ax.set_ylabel("Размер задачи (N)")
@@ -74,13 +83,16 @@ def main():
     for i in range(raw.shape[0]):
         for j in range(raw.shape[1]):
             if inf_mask[i, j]:
-                # Закрашиваем ячейку с таймаутом в тёмно-бордовый и ставим знак бесконечности
                 ax.add_patch(
-                    Rectangle((j - 0.5, i - 0.5), 1, 1, facecolor="#67000d", edgecolor="none")
+                    Rectangle((j - 0.5, i - 0.5), 1, 1, facecolor="#67000d", edgecolor="none", zorder=2)
                 )
-                ax.text(j, i, "∞", ha="center", va="center", color="white", fontsize=14, fontweight="bold")
+                ax.text(
+                    j, i, "∞",
+                    ha="center", va="center",
+                    color="white", fontsize=14, fontweight="bold", zorder=3
+                )
             elif nan_mask[i, j]:
-                ax.text(j, i, "—", ha="center", va="center", color="#666666", fontsize=10)
+                ax.text(j, i, "—", ha="center", va="center", color="#666666", fontsize=10, zorder=3)
             else:
                 val = raw[i, j]
                 text_color = "white" if val > mid else "black"
@@ -88,11 +100,19 @@ def main():
                 ax.text(
                     j, i, label,
                     ha="center", va="center",
-                    color=text_color, fontsize=10, fontweight="bold"
+                    color=text_color, fontsize=10, fontweight="bold", zorder=3
                 )
 
+    if inf_mask.any():
+        ax.legend(
+            handles=[Patch(facecolor="#67000d", label="∞ — все запуски завершились ошибкой / таймаутом")],
+            loc="upper left",
+            bbox_to_anchor=(0, 1.13),
+            frameon=False,
+        )
+
     plt.tight_layout()
-    plt.savefig(out_img, dpi=150)
+    plt.savefig(out_img, dpi=150, bbox_inches="tight")
     print(f"Saved: {out_img}")
 
     if os.environ.get("DISPLAY"):
