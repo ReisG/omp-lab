@@ -15,7 +15,7 @@ CFLAGS="-O3 -fopenmp -lm"
 
 # Перебираемые параметры
 # 30 50 100 500 1000 1500 5000 10000 15000 50000 100000
-N_LIST=(30 50 70 90 100)
+N_LIST=(30 50 70 90 100 500 1000)
 # 1 2 3 4 5 6 7 8 9 10 20 40 60 80 100 120 140 160
 THREADS_LIST=(1) # one thread program. No need for multiple threads
 
