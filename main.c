@@ -15,7 +15,17 @@ int itmax = ITMAX;
 int i, j, k;
 double eps;
 double A[N][N][N];
-int Active[N][N][N];
+
+inline int Active(int i, int j, int k) {
+    double x = (double)i / (N - 1);
+    double y = (double)j / (N - 1);
+    double z = (double)k / (N - 1);
+    double r2 = (x - 0.5) * (x - 0.5) + (y - 0.5) * (y - 0.5);
+    return i > 0 && j > 0 && k > 0 &&
+        i < N - 1 && j < N - 1 && k < N - 1 &&
+        r2 > 0.035 && r2 < 0.22 &&
+        k > N / 5 && k < 4 * N / 5;
+}
 
 void init(void);
 void relax(void);
@@ -46,11 +56,7 @@ void init(void)
         double y = (double)j / (N - 1);
         double z = (double)k / (N - 1);
         double r2 = (x - 0.5) * (x - 0.5) + (y - 0.5) * (y - 0.5);
-        Active[i][j][k] = i > 0 && j > 0 && k > 0 &&
-                          i < N - 1 && j < N - 1 && k < N - 1 &&
-                          r2 > 0.035 && r2 < 0.22 &&
-                          k > N / 5 && k < 4 * N / 5;
-        if (!Active[i][j][k])
+        if (!Active(i, j, k))
             A[i][j][k] = 0.1 + 0.25 * exp(-r2) * cos(z);
         else
             A[i][j][k] = 0.7 * (2.0 + sin(3.0 * z) + cos(x))
@@ -65,7 +71,7 @@ void relax(void)
     for (i = 1; i < N - 1; i++)
     {
         double x, y, z, cx, cy, cz, old, b;
-        if (!Active[i][j][k]) continue;
+        if (!Active(i, j, k)) continue;
         x = (double)i / (N - 1);
         y = (double)j / (N - 1);
         z = (double)k / (N - 1);
