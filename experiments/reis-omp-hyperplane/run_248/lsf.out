@@ -1,0 +1,42 @@
+Sender: LSF System <lsfadmin@polus-c2-ib.bmc.hpc.cs.msu.ru>
+Subject: Job 1627874: <export OMP_NUM_THREADS=80;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//bins/prog_N500" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/exit_code.txt"> in cluster <MSUCluster> Exited
+
+Job <export OMP_NUM_THREADS=80;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//bins/prog_N500" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/exit_code.txt"> was submitted from host <polus-ib.bmc.hpc.cs.msu.ru> by user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 15:58:19 2026
+Job was executed on host(s) <20*polus-c2-ib.bmc.hpc.cs.msu.ru>, in queue <short>, as user <edu-cmc-skpod26-327-11> in cluster <MSUCluster> at Wed Nov 25 16:11:05 2026
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11> was used as the home directory.
+</home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab> was used as the working directory.
+Started at Wed Nov 25 16:11:05 2026
+Terminated at Wed Nov 25 16:26:06 2026
+Results reported at Wed Nov 25 16:26:06 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+export OMP_NUM_THREADS=80;                   t_start=$(date +%s.%N);                   "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//bins/prog_N500" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.out" 2> "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/prog.err";                   rc=$?;                   t_end=$(date +%s.%N);                   awk -v s="$t_start" -v e="$t_end" 'BEGIN { printf "%.6f\n", e - s }' > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/time.txt";                   echo "$rc" > "/home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/exit_code.txt"
+------------------------------------------------------------
+
+TERM_RUNLIMIT: job killed after reaching LSF run time limit.
+Exited with signal termination: 19.
+
+Resource usage summary:
+
+    CPU time :                                   940.04 sec.
+    Max Memory :                                 963 MB
+    Average Memory :                             955.48 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              3
+    Max Threads :                                83
+    Run time :                                   902 sec.
+    Turnaround time :                            1667 sec.
+
+The output (if any) follows:
+
+
+
+PS:
+
+Read file </home_edu/edu-cmc-skpod26-327/edu-cmc-skpod26-327-11/work/omp-lab/experiments/reis-omp-hyperplane//run_248/lsf.err> for stderr output of this job.
+
