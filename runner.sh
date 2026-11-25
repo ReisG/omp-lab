@@ -11,7 +11,7 @@ set -euo pipefail
 EXP_NAME="${1:-exp_$(date +%Y%m%d_%H%M%S)}"
 SRC_FILE="main.c"
 CC="gcc"
-CFLAGS="-O3 -fopenmp -lm"
+CFLAGS="-O3 -fopenmp -lm -Wall"
 
 # Перебираемые параметры
 # 30 50 100 500 1000 1500 5000 10000 15000 50000 100000
