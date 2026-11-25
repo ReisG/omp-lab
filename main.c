@@ -34,24 +34,29 @@ void verify(void);
 int main(void)
 {
     int it;
-    init();
-    for (it = 1; it <= itmax; it++)
+    #pragma omp parallel
     {
-        eps = 0.;
-        relax();
-        printf("it=%4i   eps=%.12e\n", it, eps);
-        if (eps < maxeps) break;
+        init();
+        for (it = 1; it <= itmax; it++)
+        {
+            eps = 0.;
+            relax();
+            printf("it=%4i   eps=%.12e\n", it, eps);
+            if (eps < maxeps) break;
+        }
+        verify();
     }
-    verify();
     return 0;
 }
 
 void init(void)
 {
-    for (k = 0; k < N; k++)
-    for (j = 0; j < N; j++)
-    for (i = 0; i < N; i++)
+    #pragma omp for collapse(2) private(k, j, i)
+    for (k = 0; k < N; ++k)
+    for (j = 0; j < N; ++j)
+    for (i = 0; i < N; ++i)
     {
+        // cannot make ith dimentions parallel (i - 1) dependency
         double x = (double)i / (N - 1);
         double y = (double)j / (N - 1);
         double z = (double)k / (N - 1);
@@ -91,6 +96,8 @@ void relax(void)
 void verify(void)
 {
     double s = 0.;
+    // no data dependancy
+    #pragma omp for collapse(3) firstprivate(k, j, i)
     for (k = 0; k < N; k++)
     for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
