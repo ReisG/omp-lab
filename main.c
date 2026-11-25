@@ -70,13 +70,13 @@ void init(void)
 
 void relax(void)
 {
-    int hyper = 0;
-    for (hyper = 0; hyper < N + N + N; ++hyper) {
-        #pragma parallel omp for firstprivate(hyper) collapse(2) reduction(max:eps)
+    #pragma omp parallel reduction(max:eps)
+    for (int hyper = 0; hyper < N + N + N; ++hyper) {
+        #pragma omp for collapse(2) firstprivate(k)
         for (j = 1; j < N; j++)
         for (i = 1; i < N; i++)
         {
-            int k = hyper - i - j;
+            k = hyper - i - j;
             if (!(0 <= k && k < N)) {
                 // there will be lots of reduntant iteration
                 continue;
