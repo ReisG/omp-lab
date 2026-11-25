@@ -71,31 +71,34 @@ void init(void)
 void relax(void)
 {
     #pragma omp parallel reduction(max:eps)
-    for (int hyper = 0; hyper < N + N + N; ++hyper) {
-        #pragma omp for collapse(2) firstprivate(k)
-        for (j = 1; j < N; j++)
-        for (i = 1; i < N; i++)
-        {
-            k = hyper - i - j;
-            if (!(0 <= k && k < N)) {
-                // there will be lots of reduntant iteration
-                continue;
+    {
+        int hyper = 0;
+        for (hyper = 0; hyper < N + N + N; ++hyper) {
+            #pragma omp for collapse(2) firstprivate(k)
+            for (j = 1; j < N; j++)
+            for (i = 1; i < N; i++)
+            {
+                k = hyper - i - j;
+                if (!(0 <= k && k < N)) {
+                    // there will be lots of reduntant iteration
+                    continue;
+                }
+                double x, y, z, cx, cy, cz, old, b;
+                if (!Active(i, j, k)) continue;
+                x = (double)i / (N - 1);
+                y = (double)j / (N - 1);
+                z = (double)k / (N - 1);
+                cx = 1.0 + 0.1 * cos(x);
+                cy = 0.8 + 0.1 * sin(y);
+                cz = 0.6 + 0.1 * exp(-z);
+                old = A[k][j][i];
+                b = (cx * (A[k][j][i - 1] + A[k][j][i + 1])
+                    + cy * (A[k][j - 1][i] + A[k][j + 1][i])
+                    + cz * (A[k - 1][j][i] + A[k + 1][j][i])
+                    + 0.4 * sin(z) * cos(x + y)) / (2.0 * (cx + cy + cz) + 0.4);
+                A[k][j][i] = old + 0.79 * (b - old);
+                eps = Max(eps, fabs(A[k][j][i] - old));
             }
-            double x, y, z, cx, cy, cz, old, b;
-            if (!Active(i, j, k)) continue;
-            x = (double)i / (N - 1);
-            y = (double)j / (N - 1);
-            z = (double)k / (N - 1);
-            cx = 1.0 + 0.1 * cos(x);
-            cy = 0.8 + 0.1 * sin(y);
-            cz = 0.6 + 0.1 * exp(-z);
-            old = A[k][j][i];
-            b = (cx * (A[k][j][i - 1] + A[k][j][i + 1])
-                + cy * (A[k][j - 1][i] + A[k][j + 1][i])
-                + cz * (A[k - 1][j][i] + A[k + 1][j][i])
-                + 0.4 * sin(z) * cos(x + y)) / (2.0 * (cx + cy + cz) + 0.4);
-            A[k][j][i] = old + 0.79 * (b - old);
-            eps = Max(eps, fabs(A[k][j][i] - old));
         }
     }
 }
