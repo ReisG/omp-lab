@@ -71,8 +71,9 @@ void init(void)
 
 void relax(void)
 {
-    for (int hyper = 0; hyper < N + N + N; ++hyper) {
-        #pragma omp for collapse(2) firstprivate(j, i) reduction(Max:eps)
+    int hyper = 0;
+    for (hyper = 0; hyper < N + N + N; ++hyper) {
+        #pragma omp for collapse(2) firstprivate(j, i, hyper) reduction(max:eps)
         for (j = 1; j < N; j++)
         for (i = 1; i < N; i++)
         {
