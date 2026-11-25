@@ -34,7 +34,6 @@ void verify(void);
 int main(void)
 {
     int it;
-    #pragma omp parallel
     {
         init();
         for (it = 1; it <= itmax; it++)
@@ -51,7 +50,7 @@ int main(void)
 
 void init(void)
 {
-    #pragma omp for collapse(2)
+    #pragma omp parallel for collapse(2) firstprivate(i)
     for (k = 0; k < N; ++k)
     for (j = 0; j < N; ++j)
     for (i = 0; i < N; ++i)
@@ -73,7 +72,7 @@ void relax(void)
 {
     int hyper = 0;
     for (hyper = 0; hyper < N + N + N; ++hyper) {
-        #pragma omp for collapse(2) reduction(max:eps)
+        #pragma parallel omp for firstprivate(hyper) collapse(2) reduction(max:eps)
         for (j = 1; j < N; j++)
         for (i = 1; i < N; i++)
         {
@@ -105,7 +104,7 @@ double s = 0.;
 void verify(void)
 {
     // no data dependancy
-    #pragma omp for collapse(3) reduction(+:s)
+    #pragma omp parallel for collapse(3) reduction(+:s)
     for (k = 0; k < N; k++)
     for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
