@@ -51,7 +51,7 @@ int main(void)
 
 void init(void)
 {
-    #pragma omp for collapse(2) private(k, j, i)
+    #pragma omp for collapse(2)
     for (k = 0; k < N; ++k)
     for (j = 0; j < N; ++j)
     for (i = 0; i < N; ++i)
@@ -73,14 +73,14 @@ void relax(void)
 {
     int hyper = 0;
     for (hyper = 0; hyper < N + N + N; ++hyper) {
-        #pragma omp for collapse(2) firstprivate(j, i, hyper) reduction(max:eps)
+        #pragma omp for collapse(2) reduction(max:eps)
         for (j = 1; j < N; j++)
         for (i = 1; i < N; i++)
         {
             int k = hyper - i - j;
             if (!(0 <= k && k < N)) {
                 // there will be lots of reduntant iteration
-                break;
+                continue;
             }
             double x, y, z, cx, cy, cz, old, b;
             if (!Active(i, j, k)) continue;
@@ -101,11 +101,11 @@ void relax(void)
     }
 }
 
+double s = 0.;
 void verify(void)
 {
-    double s = 0.;
     // no data dependancy
-    #pragma omp for collapse(3) firstprivate(k, j, i)
+    #pragma omp for collapse(3) reduction(+:s)
     for (k = 0; k < N; k++)
     for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
