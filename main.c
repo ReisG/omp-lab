@@ -33,15 +33,22 @@ void verify(void);
 
 int main(void)
 {
-    int it;
+    eps = 0.;
+    #pragma omp parallel
     {
+        int it;
+        int done = 0;
         init();
         for (it = 1; it <= itmax; it++)
         {
-            eps = 0.;
             relax();
-            printf("it=%4i   eps=%.12e\n", it, eps);
-            if (eps < maxeps) break;
+            #pragma omp single copyprivate(done)
+            {
+                printf("it=%4i   eps=%.12e\n", it, eps);
+                done = eps < maxeps;
+                eps = 0.;
+            }
+            if (done) break;
         }
         verify();
     }
@@ -50,7 +57,7 @@ int main(void)
 
 void init(void)
 {
-    #pragma omp parallel for collapse(2) firstprivate(i)
+    #pragma omp for collapse(2) firstprivate(i)
     for (k = 0; k < N; ++k)
     for (j = 0; j < N; ++j)
     for (i = 0; i < N; ++i)
@@ -70,11 +77,10 @@ void init(void)
 
 void relax(void)
 {
-    #pragma omp parallel reduction(max:eps)
     {
         int hyper = 0;
         for (hyper = 0; hyper < N + N + N; ++hyper) {
-            #pragma omp for collapse(2) firstprivate(k)
+            #pragma omp for collapse(2) firstprivate(k) reduction(max:eps)
             for (j = 1; j < N; j++)
             for (i = 1; i < N; i++)
             {
@@ -107,12 +113,13 @@ double s = 0.;
 void verify(void)
 {
     // no data dependancy
-    #pragma omp parallel for collapse(3) reduction(+:s)
+    #pragma omp for collapse(3) reduction(+:s)
     for (k = 0; k < N; k++)
     for (j = 0; j < N; j++)
     for (i = 0; i < N; i++)
         s += A[k][j][i] * (i + 1) * (j + 1) * (k + 1)
              / ((double)N * N * N);
+    #pragma omp single
     printf("S=%.12e\n", s);
 }
 
